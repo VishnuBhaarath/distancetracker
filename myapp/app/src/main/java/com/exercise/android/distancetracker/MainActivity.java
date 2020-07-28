@@ -20,7 +20,6 @@ import java.util.List;
 
 public class MainActivity extends AppCompatActivity implements SensorEventListener{
     List list;
-
     TextView textView1;
    SensorManager mSensorManager;
    Sensor mSensor;
@@ -31,19 +30,27 @@ public class MainActivity extends AppCompatActivity implements SensorEventListen
 
 
 
+    @RequiresApi(api = Build.VERSION_CODES.Q)
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-
+        if(ContextCompat.checkSelfPermission(this,
+                Manifest.permission.ACTIVITY_RECOGNITION) == PackageManager.PERMISSION_DENIED){
+            //ask for permission
+            requestPermissions(new String[]{Manifest.permission.ACTIVITY_RECOGNITION}, 1);
+        }
         textView1 = (TextView) findViewById(R.id.textview);
         mSensorManager = (SensorManager) getSystemService(SENSOR_SERVICE);
-
-        if (mSensorManager.getDefaultSensor(Sensor.TYPE_ACCELEROMETER) != null) {
-            mSensor = mSensorManager.getDefaultSensor(Sensor.TYPE_ACCELEROMETER);
+        if (mSensorManager.getDefaultSensor(Sensor.TYPE_SIGNIFICANT_MOTION) != null) {
+            Log.d("galxyj7 ", "Sensor is available");
+        }
+        if (mSensorManager.getDefaultSensor(Sensor.TYPE_STEP_COUNTER) != null) {
+            mSensor = mSensorManager.getDefaultSensor(Sensor.TYPE_STEP_COUNTER);
             isSensorPresent = true;
         } else {
             Toast.makeText(MainActivity.this,"error",Toast.LENGTH_SHORT).show();
+            textView1.setText("Sensor not available");
             isSensorPresent = false;
         }
 
@@ -51,7 +58,6 @@ public class MainActivity extends AppCompatActivity implements SensorEventListen
     @Override
     protected void onResume() {
         super.onResume();
-
         if(isSensorPresent)
         {
             mSensorManager.registerListener(this, mSensor,
