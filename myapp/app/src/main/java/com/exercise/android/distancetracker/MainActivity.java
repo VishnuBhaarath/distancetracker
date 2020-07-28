@@ -13,22 +13,15 @@ import android.widget.TextView;
 
 import java.util.List;
 
-public class MainActivity extends AppCompatActivity {
+public class MainActivity extends AppCompatActivity implements SensorEventListener{
     List list;
 
     TextView textView1;
    SensorManager mSensorManager;
-   Sensor mAccelerometer;
-
-    SensorEventListener sel = new SensorEventListener(){
-        public void onAccuracyChanged(Sensor sensor, int accuracy) {}
-        public void onSensorChanged(SensorEvent event) {
-
-            textView1.setText(String.valueOf(event.values[0]));
+   Sensor mSensor;
+   private boolean isSensorPresent=false;
 
 
-        }
-    };
 
 
 
@@ -37,9 +30,45 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        textView1=(TextView)findViewById(R.id.textview);
-        mSensorManager = (SensorManager)getSystemService(SENSOR_SERVICE);
-        mAccelerometer = mSensorManager.getDefaultSensor(Sensor.TYPE_STEP_COUNTER);
-        mSensorManager.registerListener(sel, mAccelerometer, SensorManager.SENSOR_DELAY_NORMAL);
+        textView1 = (TextView) findViewById(R.id.textview);
+        mSensorManager = (SensorManager) getSystemService(SENSOR_SERVICE);
+        if (mSensorManager.getDefaultSensor(Sensor.TYPE_STEP_COUNTER) != null) {
+            mSensor = mSensorManager.getDefaultSensor(Sensor.TYPE_STEP_COUNTER);
+            isSensorPresent = true;
+        } else {
+            isSensorPresent = false;
+        }
+
     }
+    @Override
+    protected void onResume() {
+        super.onResume();
+        if(isSensorPresent)
+        {
+            mSensorManager.registerListener(this, mSensor,
+                    SensorManager.SENSOR_DELAY_NORMAL);
+        }
+    }
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+        if(isSensorPresent)
+        {
+            mSensorManager.unregisterListener(this);
+        }
+    }
+
+    @Override
+    public void onSensorChanged(SensorEvent event) {
+        textView1.setText(String.valueOf(event.values[0]));
+
+    }
+
+    @Override
+    public void onAccuracyChanged(Sensor sensor, int i) {
+
+    }
+
+
 }
