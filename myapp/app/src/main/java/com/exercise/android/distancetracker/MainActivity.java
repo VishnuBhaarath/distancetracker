@@ -51,6 +51,7 @@ public class MainActivity extends AppCompatActivity implements SensorEventListen
     @Override
     protected void onResume() {
         super.onResume();
+
         if(isSensorPresent)
         {
             mSensorManager.registerListener(this, mSensor,
