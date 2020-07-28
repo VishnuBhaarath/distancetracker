@@ -39,7 +39,7 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
         textView1=(TextView)findViewById(R.id.textview);
         mSensorManager = (SensorManager)getSystemService(SENSOR_SERVICE);
-        mAccelerometer = mSensorManager.getDefaultSensor(Sensor.TYPE_STEP_DETECTOR);
+        mAccelerometer = mSensorManager.getDefaultSensor(Sensor.TYPE_STEP_COUNTER);
         mSensorManager.registerListener(sel, mAccelerometer, SensorManager.SENSOR_DELAY_NORMAL);
     }
 }
