@@ -42,11 +42,9 @@ public class MainActivity extends AppCompatActivity implements SensorEventListen
         }
         textView1 = (TextView) findViewById(R.id.textview);
         mSensorManager = (SensorManager) getSystemService(SENSOR_SERVICE);
-        if (mSensorManager.getDefaultSensor(Sensor.TYPE_SIGNIFICANT_MOTION) != null) {
-            Log.d("galxyj7 ", "Sensor is available");
-        }
-        if (mSensorManager.getDefaultSensor(Sensor.TYPE_STEP_COUNTER) != null) {
-            mSensor = mSensorManager.getDefaultSensor(Sensor.TYPE_STEP_COUNTER);
+
+        if (mSensorManager.getDefaultSensor(Sensor.TYPE_ACCELEROMETER) != null) {
+            mSensor = mSensorManager.getDefaultSensor(Sensor.TYPE_ACCELEROMETER);
             isSensorPresent = true;
         } else {
             Toast.makeText(MainActivity.this,"error",Toast.LENGTH_SHORT).show();
@@ -76,7 +74,8 @@ public class MainActivity extends AppCompatActivity implements SensorEventListen
 
     @Override
     public void onSensorChanged(SensorEvent event) {
-        textView1.setText(String.valueOf(event.values[0]));
+
+        textView1.setText("X: "+event.values[0]+"y:"+event.values[1]+"Z:"+event.values[2]);
 
     }
 
