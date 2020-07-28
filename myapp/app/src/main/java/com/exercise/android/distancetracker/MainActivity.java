@@ -8,27 +8,35 @@ import android.hardware.SensorEventListener;
 import android.hardware.SensorManager;
 import android.os.Bundle;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import java.util.List;
 
 public class MainActivity extends AppCompatActivity {
-    SensorManager sm = null;
-    float[] values;
     List list;
+
+    TextView textView1;
+   SensorManager mSensorManager;
+   Sensor mAccelerometer;
 
     SensorEventListener sel = new SensorEventListener(){
         public void onAccuracyChanged(Sensor sensor, int accuracy) {}
         public void onSensorChanged(SensorEvent event) {
-            values = event.values;
-            Toast.makeText(MainActivity.this,"0"+values[0],Toast.LENGTH_SHORT).show();
+            float[] values = event.values;
+            textView1.setText("x: "+values[0]+"\ny: "+values[1]+"\nz: "+values[2]);
+
 
         }
     };
+
+
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-       
+        textView1=(TextView)findViewById(R.id.textview);
+        mSensorManager = (SensorManager)getSystemService(SENSOR_SERVICE);
+        mAccelerometer = mSensorManager.getDefaultSensor(Sensor.TYPE_ACCELEROMETER);
+        mSensorManager.registerListener(sel, mAccelerometer, SensorManager.SENSOR_DELAY_NORMAL);
     }
 }
