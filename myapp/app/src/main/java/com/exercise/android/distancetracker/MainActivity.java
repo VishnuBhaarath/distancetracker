@@ -24,8 +24,9 @@ public class MainActivity extends AppCompatActivity implements SensorEventListen
    SensorManager mSensorManager;
    Sensor mSensor;
    private boolean isSensorPresent=false;
-
-
+   private double difference=0;
+   private double previous=0;
+  int stepcount=0;
 
 
 
@@ -35,11 +36,7 @@ public class MainActivity extends AppCompatActivity implements SensorEventListen
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        if(ContextCompat.checkSelfPermission(this,
-                Manifest.permission.ACTIVITY_RECOGNITION) == PackageManager.PERMISSION_DENIED){
-            //ask for permission
-            requestPermissions(new String[]{Manifest.permission.ACTIVITY_RECOGNITION}, 1);
-        }
+
         textView1 = (TextView) findViewById(R.id.textview);
         mSensorManager = (SensorManager) getSystemService(SENSOR_SERVICE);
 
@@ -47,7 +44,7 @@ public class MainActivity extends AppCompatActivity implements SensorEventListen
             mSensor = mSensorManager.getDefaultSensor(Sensor.TYPE_ACCELEROMETER);
             isSensorPresent = true;
         } else {
-            Toast.makeText(MainActivity.this,"error",Toast.LENGTH_SHORT).show();
+
             textView1.setText("Sensor not available");
             isSensorPresent = false;
         }
@@ -74,8 +71,16 @@ public class MainActivity extends AppCompatActivity implements SensorEventListen
 
     @Override
     public void onSensorChanged(SensorEvent event) {
-
-        textView1.setText("X: "+event.values[0]+"y:"+event.values[1]+"Z:"+event.values[2]);
+        float x_acceleration=event.values[0];
+        float y_acceleration=event.values[1];
+        float z_acceleration=event.values[2];
+        double Magnitude = Math.sqrt(x_acceleration*x_acceleration + y_acceleration*y_acceleration + z_acceleration*z_acceleration);
+        difference=Magnitude-previous;
+        previous=Magnitude;
+        if(difference>6){
+            stepcount=stepcount+1;
+        }
+        textView1.setText(String.valueOf(Magnitude));
 
     }
 
