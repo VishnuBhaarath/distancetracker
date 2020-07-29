@@ -30,7 +30,7 @@ import java.util.ArrayList;
 
 public class MainActivity extends AppCompatActivity {
     TextView textview;
-
+    double mdistance=0;
     private int locationRequestCode = 1000;
     private FusedLocationProviderClient fusedLocationProviderClient;
     private LocationRequest locationRequest;
@@ -58,10 +58,24 @@ public class MainActivity extends AppCompatActivity {
                 double  longitude=locationResult.getLastLocation().getLongitude();
                 double prevlat=latitude;
                 double prevlong=longitude;
+                Location locationA = new Location("point A");
+
+                locationA.setLatitude(latitude);
+                locationA.setLongitude(longitude);
+
+                Location locationB = new Location("point B");
+
+                locationB.setLatitude(prevlat);
+                locationB.setLongitude(prevlong);
+
+                float distance = locationA.distanceTo(locationB);
+                Toast.makeText(MainActivity.this,""+distance,Toast.LENGTH_SHORT).show();
+                mdistance=distance+mdistance;
+                textview.setText(""+mdistance);
                 Log.e("Mainactivity", "lat" + locationResult.getLastLocation().getLatitude());
                 Log.e("Mainactivity", "Long" + locationResult.getLastLocation().getLongitude());
-               double value= distance(prevlat,prevlong,latitude,longitude);
-               textview.setText(""+value);
+
+
             }
         }, getMainLooper());
     }
@@ -90,26 +104,9 @@ public class MainActivity extends AppCompatActivity {
         });
     }
 
-    private double distance(double lat1, double lon1, double lat2, double lon2) {
-        double theta = lon1 - lon2;
-        double dist = Math.sin(deg2rad(lat1))
-                * Math.sin(deg2rad(lat2))
-                + Math.cos(deg2rad(lat1))
-                * Math.cos(deg2rad(lat2))
-                * Math.cos(deg2rad(theta));
-        dist = Math.acos(dist);
-        dist = rad2deg(dist);
-        dist = dist * 60 * 1.1515;
-    
-        return (dist);
-    }
 
-    private double deg2rad(double deg) {
-        return (deg * Math.PI / 180.0);
-    }
 
-    private double rad2deg(double rad) {
-        return (rad * 180.0 / Math.PI);
-    }
+
+
 
 }
