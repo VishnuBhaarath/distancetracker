@@ -29,7 +29,7 @@ import com.nabinbhandari.android.permissions.Permissions;
 import java.util.ArrayList;
 
 public class MainActivity extends AppCompatActivity {
-    TextView textview;
+    TextView textview,latval,longval;
     double mdistance=0;
     private int locationRequestCode = 1000;
     private FusedLocationProviderClient fusedLocationProviderClient;
@@ -40,6 +40,8 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         textview = (TextView) findViewById(R.id.textview1);
+        latval=(TextView)findViewById(R.id.latitude);
+        longval=(TextView)findViewById(R.id.longitude);
         requestlocationupdates();
         callpermissions();
     }
@@ -53,7 +55,6 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onLocationResult(LocationResult locationResult) {
                 super.onLocationResult(locationResult);
-                Toast.makeText(MainActivity.this,"hj",Toast.LENGTH_SHORT).show();
                 double latitude=locationResult.getLastLocation().getLatitude();
                 double  longitude=locationResult.getLastLocation().getLongitude();
                 double prevlat=latitude;
@@ -69,12 +70,12 @@ public class MainActivity extends AppCompatActivity {
                 locationB.setLongitude(prevlong);
 
                 float distance = locationA.distanceTo(locationB);
-                Toast.makeText(MainActivity.this,""+distance,Toast.LENGTH_SHORT).show();
-                mdistance=distance+mdistance;
-                textview.setText(""+mdistance);
-                Log.e("Mainactivity", "lat" + locationResult.getLastLocation().getLatitude());
-                Log.e("Mainactivity", "Long" + locationResult.getLastLocation().getLongitude());
-
+                Toast.makeText(MainActivity.this,""+(distance*1000),Toast.LENGTH_SHORT).show();
+                mdistance=distance*1000+mdistance;
+                textview.setText(" "+mdistance);
+                latval.setText(" "+locationResult.getLastLocation().getLatitude());
+                longval.setText("  "+locationResult.getLastLocation().getLongitude());
+             
 
             }
         }, getMainLooper());
