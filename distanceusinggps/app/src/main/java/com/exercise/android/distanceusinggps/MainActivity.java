@@ -71,11 +71,11 @@ public class MainActivity extends AppCompatActivity {
 
                 float distance = locationA.distanceTo(locationB);
                 Toast.makeText(MainActivity.this,""+(distance*1000),Toast.LENGTH_SHORT).show();
-                mdistance=distance*1000+mdistance;
+                mdistance=distance*100000+mdistance;
                 textview.setText(" "+mdistance);
                 latval.setText(" "+locationResult.getLastLocation().getLatitude());
                 longval.setText("  "+locationResult.getLastLocation().getLongitude());
-             
+
 
             }
         }, getMainLooper());
