@@ -1,0 +1,2 @@
+rootProject.name='distanceusinggps'
+include ':app'
